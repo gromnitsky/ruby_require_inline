@@ -40,7 +40,8 @@ begin
     when '--flat'
       $conf[:mode] = 'flat'
     when '--version'
-      puts RequireInline::VERSION
+      puts RubyRequireInline::VERSION
+      puts $LOAD_PATH
       exit 0
     when '-o'
       $conf[:output] = arg
