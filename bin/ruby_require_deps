@@ -43,7 +43,7 @@ begin
       puts RequireInline::VERSION
       exit 0
     when '-o'
-      $conf[:output] = File.open arg, 'w+'
+      $conf[:output] = arg
     end
   end
 rescue GetoptLong::InvalidOption
@@ -55,12 +55,20 @@ $conf[:input] = ARGV[0]
 
 
 
+dir_orig = Dir.pwd
 Dir.chdir File.dirname $conf[:input]
 $conf[:input] = File.basename $conf[:input]
 
 dw = RubyRequireInline::DepsWalk.new $conf[:input]
 dw.start do |file, level, not_found|
   indent = $conf[:mode] == 'tree' ? '  ' * level : ''
+
+  # open output so late because we don't want to destroy the output file
+  # for nothing if there was an error in cl params
+  if $conf[:output] != $stdout && !$conf[:output].is_a?(IO)
+    $conf[:output] = File.open File.join(dir_orig, $conf[:output]), 'w+'
+  end
+
   $conf[:output].printf "%s%s%s\n", indent, file, not_found ? " (not local?)" : ""
   $conf[:output].flush if $conf[:output] == $stdout
 end
