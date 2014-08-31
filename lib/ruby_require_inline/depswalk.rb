@@ -2,9 +2,12 @@ module RubyRequireInline
 
   class DepsWalk
 
-    def initialize entry_point
+    def initialize deps_paths, entry_point
       @cache = {}
       @entry_point = entry_point
+      @deps_paths = deps_paths
+
+      @deps_paths.unshift "."
     end
 
     def start &block
@@ -47,14 +50,18 @@ module RubyRequireInline
     def dep_path dep, parent
       return nil unless dep
 
-      [".rb", ""].each do |idx|
-        file = dep.first + idx
-        if dep[1]
-          # dep.first is relative to a parent dep
-          file = File.join File.dirname(parent), file
-        end
+      @deps_paths.each do |path|
+        [".rb", ""].each do |idx|
+          file = dep.first + idx
+          if dep[1]
+            # dep.first is relative to a parent dep
+            file = File.join File.dirname(parent), file
+          else
+            file = File.join path, file
+          end
 
-        return File.realpath file if File.readable?(file) && File.file?(file)
+          return File.realpath file if File.readable?(file) && File.file?(file)
+        end
       end
 
       #  puts "#{dep.first} not found"

@@ -10,6 +10,7 @@ require_relative '../lib/ruby_require_inline/depswalk'
 $conf = {
   mode: 'tree',               # also: flat
   verbose: 0,
+  deps_paths: [],
   output: $stdout,
   input: nil
 }
@@ -28,6 +29,7 @@ opts = GetoptLong.new(['--help', '-h', GetoptLong::NO_ARGUMENT],
                       ['--flat', GetoptLong::NO_ARGUMENT],
                       ['-v', GetoptLong::NO_ARGUMENT],
                       ['--version', '-V', GetoptLong::NO_ARGUMENT],
+                      ['-p', GetoptLong::REQUIRED_ARGUMENT],
                       ['-o', GetoptLong::REQUIRED_ARGUMENT])
 
 begin
@@ -45,6 +47,8 @@ begin
       exit 0
     when '-o'
       $conf[:output] = arg
+    when '-p'
+      $conf[:deps_paths] << arg
     end
   end
 rescue GetoptLong::InvalidOption
@@ -60,7 +64,7 @@ dir_orig = Dir.pwd
 Dir.chdir File.dirname $conf[:input]
 $conf[:input] = File.basename $conf[:input]
 
-dw = RubyRequireInline::DepsWalk.new $conf[:input]
+dw = RubyRequireInline::DepsWalk.new $conf[:deps_paths], $conf[:input]
 dw.start do |file, level, not_found|
   indent = $conf[:mode] == 'tree' ? '  ' * level : ''
 
