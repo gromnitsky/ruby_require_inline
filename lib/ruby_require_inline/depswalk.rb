@@ -39,6 +39,8 @@ module RubyRequireInline
     end
 
     def walk_sexp sexp, &block
+      return unless sexp.is_a?(Sexp)
+
       sexp.sexp_body.each do |node|
         yield node if block_given?
         walk_sexp(node, &block) if node.is_a?(Sexp) # recursion!
