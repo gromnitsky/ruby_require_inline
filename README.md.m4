@@ -1,3 +1,4 @@
+changequote([,])dnl
 # ruby_require_inline
 
 Recursively goes through ruby 'require' statements & prints a tree of
@@ -28,12 +29,7 @@ useful.
 
 ```
 $ ruby_require_deps -h
-Usage: ruby_require_deps [-p path] [-o output] input
-    -p DIR                           Add path for additional deps search
-    -o FILE                          Output file instead of stdout
-        --flat                       Print a simple list instead of a tree
-    -V, --version                    Version info & $:
-
+syscmd([bin/ruby_require_deps -h])
 ```
 
 Dump a tree:
