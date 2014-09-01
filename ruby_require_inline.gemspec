@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = RubyRequireInline::VERSION
   spec.authors       = ["Alexander Gromnitsky"]
   spec.email         = ["alexander.gromnitsky@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
-  spec.homepage      = ""
+  spec.summary       = "Analyses all 'require' statements & concatenates dependencies into 1 file."
+  spec.description   = "See the summary."
+  spec.homepage      = "https://github.com/gromnitsky/ruby_require_inline"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
