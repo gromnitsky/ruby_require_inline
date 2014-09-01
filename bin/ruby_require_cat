@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 
-require 'getoptlong'
+require 'optparse'
 
 require 'ruby_parser'
 
 require_relative '../lib/ruby_require_inline/version'
 
 $conf = {
-  verbose: 0,
+  banner: "Usage: #{File.basename $0} [-o output] [input]",
   output: $stdout,
   input: $stdin
 }
@@ -16,7 +16,7 @@ $conf = {
 
 def usage ec = 0
   stream = ec == 0 ? $stdout : $stderr
-  stream.puts "Usage: #{File.basename $0} [-o output] [input]"
+  stream.puts $conf[:banner]
   exit ec
 end
 
@@ -31,26 +31,22 @@ end
 
 
 
-opts = GetoptLong.new(['--help', '-h', GetoptLong::NO_ARGUMENT],
-                      ['-v', GetoptLong::NO_ARGUMENT],
-                      ['--version', '-V', GetoptLong::NO_ARGUMENT],
-                      ['-o', GetoptLong::REQUIRED_ARGUMENT])
+opt_parser = OptionParser.new do |opts|
+  opts.banner = $conf[:banner]
+
+  opts.on("-o FILE", "Output file instead of stdout") do |arg|
+    $conf[:output] = arg
+  end
+  opts.on("-V", "--version", "Version info") do
+    puts RubyRequireInline::VERSION
+    exit 0
+  end
+end
 
 begin
-  opts.each do |opt, arg|
-    case opt
-    when '--help'
-      usage
-    when '-v'
-      $conf[:verbose] += 1
-    when '--version'
-      puts RubyRequireInline::VERSION
-      exit 0
-    when '-o'
-      $conf[:output] = arg
-    end
-  end
-rescue GetoptLong::InvalidOption
+  opt_parser.parse!
+rescue OptionParser::InvalidOption => e
+  $stderr.puts e
   usage 1
 end
 
