@@ -26,7 +26,7 @@ end
 opt_parser = OptionParser.new do |opts|
   opts.banner = $conf[:banner]
 
-  opts.on("-p", "Add path for additional deps search") do |arg|
+  opts.on("-p DIR", "Add path for additional deps search") do |arg|
     $conf[:deps_paths] << arg
   end
   opts.on("-o FILE", "Output file instead of stdout") do |arg|
