@@ -2,8 +2,6 @@
 
 require 'getoptlong'
 
-require 'ruby_parser'
-
 require_relative '../lib/ruby_require_inline/version'
 require_relative '../lib/ruby_require_inline/depswalk'
 

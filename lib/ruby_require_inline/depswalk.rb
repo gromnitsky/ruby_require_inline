@@ -1,3 +1,5 @@
+require 'ruby_parser'
+
 module RubyRequireInline
 
   class DepsWalk
