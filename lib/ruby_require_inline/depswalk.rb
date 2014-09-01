@@ -91,8 +91,11 @@ module RubyRequireInline
 
       return nil unless is_require_node.call sexp
 
+      is_relative_path = -> (node) {
+        node.sexp_body[2].sexp_body.first.match(/^(\.{1,2})?\//)
+      }
       is_relative = -> (node) {
-        node.sexp_body[1] == :require_relative || node.sexp_body[2].match(/^(\.{1,2})?\//)
+        node.sexp_body[1] == :require_relative || is_relative_path.call(node)
       }
 
       if sexp.sexp_body[2]
