@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'ruby_require_inline'
+Dir.chdir __dir__
 
 require 'minitest/autorun'
